@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Autorização TikTok</title>
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><a href="./"><img src="icon.png" alt="">Por Dentro Oficial</a></header>
+<main>
+  <h1 id="title">Autorização recebida</h1>
+  <p id="msg">Copie o código abaixo e cole no script de postagem. Ele expira em poucos minutos.</p>
+  <div class="box" id="code"></div>
+  <button id="copy" type="button">Copiar código</button>
+</main>
+<script>
+  const p = new URLSearchParams(location.search);
+  const code = p.get("code");
+  const err = p.get("error");
+  if (!code) {
+    document.getElementById("title").textContent = err ? "Autorização negada" : "Nenhum código recebido";
+    document.getElementById("msg").textContent = err
+      ? "O TikTok retornou: " + (p.get("error_description") || err)
+      : "Esta página só mostra algo depois do login pelo TikTok.";
+    document.getElementById("code").remove();
+    document.getElementById("copy").remove();
+  } else {
+    document.getElementById("code").textContent = code;
+    document.getElementById("copy").onclick = async () => {
+      try { await navigator.clipboard.writeText(code); document.getElementById("copy").textContent = "Copiado!"; } catch (e) {}
+    };
+  }
+</script>
+</body>
+</html>
